@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Activities - Orphanage Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 40px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px 15px;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background: #1abc9c;
+        }
+
+        /* Page Content */
+        .container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        tr:hover {
+            background: #dcdcdc;
+        }
+
+        /* Add New Activity Button */
+        .add-btn {
+            display: inline-block;
+            background: #1abc9c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #16a085;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="../stafhome">
+            <img src="../static/daycare-logo-icon-childcare-logo-kindergarten-logo-school-concept-isolated-silhouette-illustration-vector.jpg" 
+                 alt="logo" class="logo">
+        </a>
+        <ul>
+            <li><a href="../addchild">Add Child</a></li>
+            <li><a href="../viewchildren">View Children</a></li>
+            <li><a href="../adddailyactivity">Add Daily Activities</a></li>
+            <li><a href="../listdailyactivity">List Daily Activities</a></li>
+            <li><a href="../logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Content Container -->
+    <div class="container">
+        <h2>Daily Activities</h2>
+        <table>
+            <tr>
+                <th>Child</th>
+                <th>Activities</th>
+                <th>Date</th>
+                <th>Staff</th>
+            </tr>
+            {% for activity in activities %}
+            <tr>
+                <td>{{ activity.child.name }}</td>
+                <td>{{ activity.description }}</td>
+                <td>{{ activity.date }}</td>
+                <td>{{ activity.staff.name }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <!-- Add New Activity Button -->
+        <a href="{% url 'add_daily_activity' %}" class="add-btn">Add New Activity</a>
+    </div>
+
+</body>
+</html>

@@ -99,3 +99,74 @@ def user_logout(request):
 
 def home(request):
     return render(request,'home.html')
+
+
+
+def stafhome(request):
+    return render(request,'staf/stafhome.html')
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Child, Staf
+from .forms import ChildForm
+
+def add_child(request):
+    # Check if user is logged in as staff
+    if "user_id" not in request.session or request.session["user_type"] != "Seller":
+        messages.error(request, "You must be logged in as staff to add a child.")
+        return redirect("login")
+
+    # Fetch the logged-in staff instance
+    staff = Staf.objects.get(id=request.session["user_id"])
+
+    if request.method == "POST":
+        form = ChildForm(request.POST, request.FILES)
+        if form.is_valid():
+            child = form.save(commit=False)
+            child.staff = staff  # Assign the staff instance
+            child.save()
+            messages.success(request, "Child added successfully!")
+            return redirect("view_children")
+    else:
+        form = ChildForm()
+    
+    return render(request, "staf/add_child.html", {"form": form})
+
+
+def view_children(request):
+    if "user_id" not in request.session or request.session["user_type"] != "Seller":
+        messages.error(request, "You must be logged in as staff to view children.")
+        return redirect("login")
+
+    children = Child.objects.all().order_by("name")  # Order by name alphabetically
+
+    return render(request, "staf/view_children.html", {"children": children})
+
+
+
+
+from django.shortcuts import render, redirect
+from .models import DailyActivity, Child
+from .forms import DailyActivityForm
+
+# ✅ Add Daily Activity
+def add_daily_activity(request):
+    if request.method == "POST":
+        form = DailyActivityForm(request.POST)
+        if form.is_valid():
+            activity = form.save(commit=False)
+            activity.staff = Staf.objects.first()  # Temporary Fix (Use proper authentication later)
+            activity.save()
+            return redirect('list_daily_activity')  # Redirect to list view after saving
+    else:
+        form = DailyActivityForm()
+    
+    return render(request, 'staf/add_daily_activity.html', {'form': form})
+
+
+# ✅ View Daily Activities
+def list_daily_activity(request):
+    activities = DailyActivity.objects.all().order_by('-date')  # Show latest first
+    return render(request, 'staf/list_daily_activity.html', {'activities': activities})
