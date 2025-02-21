@@ -267,3 +267,59 @@ def child_fee_details(request, child_id):
 
 
 
+import razorpay
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from .models import Child, FeeTransaction
+
+def process_payment(request, child_id):
+    child = get_object_or_404(Child, id=child_id)
+
+    # Get the pending or overdue fee transaction
+    fee_transaction = FeeTransaction.objects.filter(child=child, status__in=["Pending", "Overdue"]).order_by('-date_paid').first()
+
+    if not fee_transaction:
+        return render(request, "parent/payment_error.html", {"message": "No pending fees found."})
+
+    # Razorpay Client
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+    # Create Order
+    order_data = {
+        "amount": int(fee_transaction.amount * 100),  # Convert amount to paise (₹1 = 100 paise)
+        "currency": "INR",
+        "payment_capture": 1,  # Auto capture payment
+    }
+    order = client.order.create(data=order_data)
+
+    # Save Order ID to pass it to frontend
+    request.session["razorpay_order_id"] = order["id"]
+
+    return render(request, "parent/payment.html", {
+        "child": child,
+        "fee_transaction": fee_transaction,
+        "razorpay_key": settings.RAZORPAY_KEY_ID,
+        "order_id": order["id"],
+        "amount": fee_transaction.amount,
+    })
+
+
+
+
+def payment_success(request, child_id):
+    child = get_object_or_404(Child, id=child_id)
+
+    # Update the latest pending fee transaction
+    fee_transaction = FeeTransaction.objects.filter(child=child, status__in=["Pending", "Overdue"]).order_by('-date_paid').first()
+
+    if fee_transaction:
+        fee_transaction.status = "Paid"
+        fee_transaction.save()
+
+    # Update child's overall fee status if all transactions are paid
+    if not FeeTransaction.objects.filter(child=child, status__in=["Pending", "Overdue"]).exists():
+        child.fee_status = "Paid"
+        child.save()
+
+    return render(request, "parent/payment_success.html", {"child": child})

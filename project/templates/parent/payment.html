@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment for {{ child.name }}</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <h2>Pay ₹{{ amount }} for {{ child.name }}</h2>
+    <button id="rzp-button1">Pay Now</button>
+
+    <script>
+        var options = {
+            "key": "{{ razorpay_key }}",
+            "amount": "{{ amount|floatformat:2 }}",
+            "currency": "INR",
+            "name": "Daycare Management",
+            "description": "Fee Payment for {{ child.name }}",
+            "order_id": "{{ order_id }}",
+            "handler": function (response){
+                window.location.href = "/child/{{ child.id }}/payment-success/";
+            },
+            "prefill": {
+                "name": "{{ child.parent.name }}",
+                "email": "{{ child.parent.email }}",
+                "contact": "{{ child.parent.phone }}"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        document.getElementById('rzp-button1').onclick = function(e){
+            rzp1.open();
+            e.preventDefault();
+        }
+    </script>
+</body>
+</html>
