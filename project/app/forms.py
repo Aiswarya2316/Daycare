@@ -55,12 +55,18 @@ class LoginForm(forms.Form):
 
 
 from django import forms
-from .models import Child
+from .models import Child, FeeTransaction
 
 class ChildForm(forms.ModelForm):
     class Meta:
         model = Child
-        fields = ["name", "age", "gender", "image"]
+        fields = ["name", "age", "gender", "image", "medical_health", "fee_status"]
+
+class FeeTransactionForm(forms.ModelForm):
+    class Meta:
+        model = FeeTransaction
+        fields = ["child", "amount", "status"]
+
 
 
 

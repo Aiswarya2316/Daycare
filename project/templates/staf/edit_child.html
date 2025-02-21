@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Daily Activity - Orphanage Management</title>
+    <title>Edit Child Details</title>
     <style>
+        /* General Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
         }
 
         body {
             background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
         }
-
         /* Navigation Bar */
         nav {
             background: #2c3e50;
@@ -58,14 +60,14 @@
             background: #1abc9c;
         }
 
-        /* Content Container */
+        /* Container */
         .container {
             max-width: 600px;
-            margin: 100px auto;
-            padding: 20px;
-            background: white;
+            background: #fff;
+            padding: 25px;
+            margin: auto;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
@@ -78,77 +80,74 @@
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            text-align: left;
         }
 
-        form p {
-            text-align: left;
+        label {
+            font-weight: bold;
+            margin: 10px 0 5px;
         }
 
         input, select, textarea {
             width: 100%;
             padding: 10px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
         }
 
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* File Upload Styling */
+        input[type="file"] {
+            padding: 5px;
+        }
+
         button {
-            background: #1abc9c;
+            background-color: #1abc9c;
             color: white;
-            padding: 12px;
-            font-size: 16px;
+            padding: 10px 15px;
             border: none;
             border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
             transition: 0.3s;
         }
 
         button:hover {
-            background: #16a085;
+            background-color: #16a085;
         }
 
-        /* View All Activities Link */
-        .view-link {
-            display: inline-block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #2c3e50;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+       
 
-        .view-link:hover {
-            color: #1abc9c;
-        }
-
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+        
     </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
     <nav>
-        <a href="../stafhome"> <img src="../static/daycare-logo-icon-childcare-logo-kindergarten-logo-school-concept-isolated-silhouette-illustration-vector.jpg" alt="logo" class="logo"></a>
-         <ul>
-             <li><a href="../addchild">Add Child</a></li>
-             <li><a href="../viewchildren">View Children</a></li>
-             <li><a href="../adddailyactivity">Add Daily Activities</a></li>
-             <li><a href="../listdailyactivity">List Daily Activities</a></li>
-             <li><a href="../add_fee">AddFee Details</a></li>
-             <li><a href="../view_fees">ViewFee Details</a></li>
-             <li><a href="../logout">Logout</a></li>
-         </ul>
-     </nav>
+       
+        <ul>
+            
+        </ul>
+    </nav>
 
-    <!-- Content Container -->
     <div class="container">
-        <h2>Add Daily Activity</h2>
-        <form method="POST">
+        <h2>Edit Child Details</h2>
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Save Activity</button>
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit">Update</button>
         </form>
-        <a href="{% url 'list_daily_activity' %}" class="view-link">View All Activities</a>
     </div>
 
 </body>

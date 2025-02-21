@@ -135,6 +135,61 @@ def add_child(request):
     return render(request, "staf/add_child.html", {"form": form})
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Child, Staf, FeeTransaction
+from .forms import ChildForm, FeeTransactionForm
+
+def edit_child_details(request, child_id):
+    if "user_id" not in request.session or request.session["user_type"] != "Seller":
+        messages.error(request, "You must be logged in as staff to edit child details.")
+        return redirect("login")
+
+    child = get_object_or_404(Child, id=child_id)
+
+    if request.method == "POST":
+        form = ChildForm(request.POST, request.FILES, instance=child)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Child details updated successfully!")
+            return redirect("view_children")
+    else:
+        form = ChildForm(instance=child)
+
+    return render(request, "staf/edit_child.html", {"form": form, "child": child})
+
+
+
+def add_fee_transaction(request):
+    if "user_id" not in request.session or request.session["user_type"] != "Seller":
+        messages.error(request, "You must be logged in as staff to add fee transactions.")
+        return redirect("login")
+
+    if request.method == "POST":
+        form = FeeTransactionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Fee transaction added successfully!")
+            return redirect("view_fees")
+    else:
+        form = FeeTransactionForm()
+
+    return render(request, "staf/add_fee.html", {"form": form})
+
+
+
+def view_fees(request):
+    if "user_id" not in request.session or request.session["user_type"] != "Seller":
+        messages.error(request, "You must be logged in as staff to view fee details.")
+        return redirect("login")
+
+    fees = FeeTransaction.objects.all().order_by("-date_paid")
+
+    return render(request, "staf/view_fees.html", {"fees": fees})
+
+
+
+
 def view_children(request):
     if "user_id" not in request.session or request.session["user_type"] != "Seller":
         messages.error(request, "You must be logged in as staff to view children.")

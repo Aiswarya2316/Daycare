@@ -37,10 +37,30 @@ class Child(models.Model):
     age = models.IntegerField()
     gender = models.CharField(max_length=10, choices=[("Male", "Male"), ("Female", "Female")])
     admission_date = models.DateField(auto_now_add=True)
-    image = models.ImageField(upload_to="child_images/", blank=True, null=True)  # Image Upload Field
+    image = models.ImageField(upload_to="child_images/", blank=True, null=True)
+    medical_health = models.TextField(blank=True, null=True)  # New Field for Health Records
+    fee_status = models.CharField(
+        max_length=20,
+        choices=[("Paid", "Paid"), ("Pending", "Pending"), ("Overdue", "Overdue")],
+        default="Pending"
+    )  # New Field for Fee Status
 
     def __str__(self):
         return self.name
+
+
+class FeeTransaction(models.Model):
+    child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name="fees")
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date_paid = models.DateField(auto_now_add=True)
+    status = models.CharField(
+        max_length=20,
+        choices=[("Paid", "Paid"), ("Pending", "Pending"), ("Overdue", "Overdue")],
+        default="Pending"
+    )
+
+    def __str__(self):
+        return f"Fee for {self.child.name} - {self.status}"
 
 
 class DailyActivity(models.Model):
