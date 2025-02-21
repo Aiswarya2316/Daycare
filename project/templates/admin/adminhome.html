@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #0073e6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background: #005bb5;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .card h3 {
+            margin: 10px 0;
+            font-size: 22px;
+            color: #333;
+        }
+        .card p {
+            font-size: 18px;
+            color: #0073e6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2 style="text-align: center;">Admin Panel</h2>
+        <a href="../adminhome">Dashboard</a>
+        <a href="../viewparents">View childrens & Parents</a>
+        <a href="../viewstaf">View Staff</a>
+        <a href="../viewfeedetails">Fee Details</a>
+        <a href="../dailyactivities">Daily Activities</a>
+        <a href="../logout">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <h1>Welcome, Admin</h1>
+        <div class="cards">
+            <div class="card">
+                <h3>Total Children</h3>
+                <p>{{ total_children }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Parents</h3>
+                <p>{{ total_parents }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Staff</h3>
+                <p>{{ total_staff }}</p>
+            </div>
+            <div class="card">
+                <h3>Fees Collected</h3>
+                <p>{{ total_fees_collected }}</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

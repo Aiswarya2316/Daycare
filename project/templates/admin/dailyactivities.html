@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Activities</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #0073e6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background: #005bb5;
+            border-left: 4px solid white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            width: calc(100% - 260px);
+        }
+
+        /* Section Header */
+        h2 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Table Styling */
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #0073e6;
+            color: white;
+            text-transform: uppercase;
+        }
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        /* Activity Type Colors */
+        .activity-learning {
+            color: #2E8B57; /* Green */
+            font-weight: bold;
+        }
+        .activity-play {
+            color: #FFA500; /* Orange */
+            font-weight: bold;
+        }
+        .activity-meal {
+            color: #DC143C; /* Red */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="../adminhome">Dashboard</a>
+        <a href="../viewparents">View Children & Parents</a>
+        <a href="../viewstaf">View Staff</a>
+        <a href="../viewfeedetails">Fee Details</a>
+        <a href="../dailyactivities" class="active">Daily Activities</a>
+        <a href="../logout">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="table-container">
+            <h2>Daily Activities</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Activity</th>
+                        <th>Staff In-Charge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in fees %}
+                    <tr>
+                        <td>{{ activity.date }}</td>
+                        
+                        <td>{{ activity.description }}</td>
+                        <td>{{ activity.staff.name }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No activities recorded.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -242,6 +242,10 @@ def list_daily_activity(request):
 
 
 
+def about(request):
+    return render(request,'parent/about.html')
+
+
 from django.shortcuts import render
 from .models import Child, FeeTransaction
 
@@ -323,3 +327,51 @@ def payment_success(request, child_id):
         child.save()
 
     return render(request, "parent/payment_success.html", {"child": child})
+
+
+
+
+
+
+
+
+
+
+from django.shortcuts import render
+from .models import Child, Parent, Staf, FeeTransaction
+
+def adminhome(request):
+    total_children = Child.objects.count()
+    total_parents = Parent.objects.count()
+    total_staff = Staf.objects.count()
+    total_fees_collected = FeeTransaction.objects.filter(status="Paid").count()
+
+    context = {
+        "total_children": total_children,
+        "total_parents": total_parents,
+        "total_staff": total_staff,
+        "total_fees_collected": total_fees_collected,
+    }
+
+    return render(request, "admin/adminhome.html", context)
+
+
+
+
+
+def viewparents(request):
+    parents = Parent.objects.all()
+    childs=Child.objects.all()
+    return render(request, "admin/viewparents.html", {"parents": parents,"childs": childs})
+
+def viewstaf(request):
+    staff = Staf.objects.all()
+    return render(request, "admin/viewstaf.html", {"staff": staff})
+
+def viewfeedetails(request):
+    fees = FeeTransaction.objects.all()
+    return render(request, "admin/viewfeedetails.html", {"fees": fees})
+
+def dailyactivities(request):
+    fees = DailyActivity.objects.all()
+    return render(request, "admin/dailyactivities.html", {"fees": fees})

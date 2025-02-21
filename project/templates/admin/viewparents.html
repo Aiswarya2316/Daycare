@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - View Records</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #0073e6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background: #005bb5;
+            border-left: 4px solid white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            width: calc(100% - 260px);
+        }
+
+        /* Section Header */
+        h2 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Table Styling */
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #0073e6;
+            color: white;
+            text-transform: uppercase;
+        }
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        /* Child Image */
+        .child-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #0073e6;
+        }
+
+        /* Fee Status Colors */
+        .status-paid {
+            color: green;
+            font-weight: bold;
+        }
+        .status-pending {
+            color: orange;
+            font-weight: bold;
+        }
+        .status-overdue {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="../adminhome">Dashboard</a>
+        <a href="../viewparents" class="active">View  children & Parents</a>
+        <a href="../viewstaf">View Staff</a>
+        <a href="../viewfeedetails">Fee Details</a>
+        <a href="../dailyactivities">Daily Activities</a>
+        <a href="../logout">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Parents Table -->
+        <div class="table-container">
+            <h2>Parents List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for parent in parents %}
+                    <tr>
+                        <td>{{ parent.name }}</td>
+                        <td>{{ parent.email }}</td>
+                        <td>{{ parent.phone }}</td>
+                        <td>{{ parent.location }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No parents found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Children Table -->
+        <div class="table-container">
+            <h2>Children List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Staff Assigned</th>
+                        <th>Fee Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for child in childs %}
+                    <tr>
+                        <td>
+                            {% if child.image %}
+                                <img src="{{ child.image.url }}" alt="Child Photo" class="child-img">
+                            {% else %}
+                                No Image
+                            {% endif %}
+                        </td>
+                        <td>{{ child.name }}</td>
+                        <td>{{ child.age }}</td>
+                        <td>{{ child.gender }}</td>
+                        <td>{{ child.staff.name }}</td>
+                        <td class="
+                            {% if child.fee_status == 'Paid' %} status-paid
+                            {% elif child.fee_status == 'Pending' %} status-pending
+                            {% else %} status-overdue {% endif %}">
+                            {{ child.fee_status }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center;">No children found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
