@@ -225,3 +225,45 @@ def add_daily_activity(request):
 def list_daily_activity(request):
     activities = DailyActivity.objects.all().order_by('-date')  # Show latest first
     return render(request, 'staf/list_daily_activity.html', {'activities': activities})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.shortcuts import render
+from .models import Child, FeeTransaction
+
+def child_list(request):
+    """Displays all children with a search option."""
+    query = request.GET.get("search")
+    if query:
+        children = Child.objects.filter(name__icontains=query)
+    else:
+        children = Child.objects.all().order_by("name")   
+    return render(request, "parent/child_list.html", {"children": children})
+
+
+
+
+def child_fee_details(request, child_id):
+    """Displays fee details for a specific child."""
+    child = Child.objects.get(id=child_id)
+    fee_transactions = FeeTransaction.objects.filter(child=child)
+    
+    return render(request, "parent/child_fee_details.html", {"child": child, "fee_transactions": fee_transactions})
+
+
+
+

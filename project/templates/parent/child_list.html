@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children List</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: #0073e6;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 15px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 80px auto 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-container button {
+            padding: 12px 18px;
+            background: #0073e6;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            background: #005bb5;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #0073e6;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tr:hover {
+            background: #eaf4ff;
+            transition: 0.3s;
+        }
+
+        .details-link {
+            text-decoration: none;
+            color: #0073e6;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .details-link:hover {
+            color: #005bb5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .search-container {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div>
+            <a href="../parenthome">Home</a>
+            <a href="#">About Us</a>
+            <a href="../children">Children</a>
+            <a href="#">Testimonials</a>
+            <a href="#">Contact</a>
+        </div>
+        <div>
+            <a href="../logout" style="color: #ffcc00;">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h2>Children List</h2>
+        
+        <!-- Search Bar -->
+        <form method="GET" class="search-container">
+            <input type="text" name="search" placeholder="Search child by name..." value="{{ request.GET.search }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Children Table -->
+        <table>
+            <tr>
+                <th>S. No</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Fee Status</th>
+                <th>Details</th>
+            </tr>
+            {% for child in children %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ child.name }}</td>
+                <td>{{ child.age }}</td>
+                <td>{{ child.gender }}</td>
+                <td>{{ child.fee_status }}</td>
+                <td><a class="details-link" href="{% url 'child_fee_details' child.id %}">View Fees</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: #e74c3c;">No children found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>

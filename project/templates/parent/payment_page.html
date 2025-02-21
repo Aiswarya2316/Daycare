@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Fees</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <h2>Pay Fees for {{ child.name }}</h2>
+    <p>Amount: ₹{{ amount }}</p>
+    <button id="pay-btn">Pay Now</button>
+
+    <script>
+        var options = {
+            "key": "{{ razorpay_key }}",
+            "amount": "{{ amount }}" * 100,
+            "currency": "INR",
+            "name": "Orphanage Management",
+            "description": "Fee Payment",
+            "order_id": "{{ order_id }}",
+            "handler": function (response) {
+                window.location.href = "{% url 'payment_success' child.id %}";
+            }
+        };
+        var rzp = new Razorpay(options);
+        document.getElementById("pay-btn").onclick = function() {
+            rzp.open();
+        };
+    </script>
+</body>
+</html>

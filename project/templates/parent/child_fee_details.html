@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Details</title>
+    <style>
+        /* General Styles */
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background-color: #f4f7f6; 
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #1abc9c;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+
+        /* Logo */
+        .logo {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        /* Main Container */
+        .container { 
+            max-width: 700px; 
+            margin: 50px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+            text-align: center;
+        }
+
+        h2 { 
+            color: #2c3e50; 
+            font-size: 28px; 
+            margin-bottom: 20px;
+        }
+
+        /* Table Styling */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            background: white;
+        }
+
+        th, td { 
+            padding: 14px; 
+            text-align: left; 
+            border-bottom: 1px solid #ddd; 
+        }
+
+        th { 
+            background-color: #1abc9c; 
+            color: white; 
+            font-size: 16px; 
+        }
+
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #e6f7f4; transition: 0.3s; }
+
+        /* Pay Now Button */
+        .pay-btn { 
+            background-color: #e74c3c; 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            font-weight: bold;
+            cursor: pointer; 
+            display: block; 
+            width: 100%; 
+            text-align: center; 
+            margin-top: 25px;
+            transition: 0.3s;
+        }
+
+        .pay-btn:hover { background-color: #c0392b; transform: scale(1.05); }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+            
+       
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h2>Fee Details for {{ child.name }}</h2>
+        
+        <table>
+            <tr>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+            {% for fee in fee_transactions %}
+            <tr>
+                <td>${{ fee.amount }}</td>
+                <td>{{ fee.status }}</td>
+                <td>{{ fee.date_paid }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align: center; color: #e74c3c;">No fee records available.</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if child.fee_status == "Pending" or child.fee_status == "Overdue" %}
+        <form action="{% url 'process_payment' child.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="pay-btn">Pay Now</button>
+        </form>
+        {% endif %}
+    </div>
+
+</body>
+</html>

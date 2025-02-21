@@ -18,4 +18,10 @@ urlpatterns = [
     path('listdailyactivity/', views.list_daily_activity, name='list_daily_activity'),
 
 
+    path("children/",views.child_list, name="child_list"),
+    path("child/<int:child_id>/fees/", views.child_fee_details, name="child_fee_details"),
+    # path("child/<int:child_id>/pay/", views.process_payment, name="process_payment"),
+    # path("child/<int:child_id>/payment-success/", views.payment_success, name="payment_success"),
+
+
 ]
